@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Terminal Clone</title>
+    <style>
+        /* Body and general styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5); /* Translucent black background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('{% static 'myimgs/backg2.gif' %}');
+        }
+
+        /* Terminal container */
+        .terminal-container {
+            position: relative; /* Make the container relative for absolute positioning of the close button */
+            background-color: rgba(0, 0, 0, 0.5); /* Translucent black background */
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            overflow-y: auto; /* Add scrollbar if content overflows vertically */
+            max-height: 80vh; /* Limit terminal container height to 80% of viewport height */
+        }
+
+        /* Close button */
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: 2px solid red; /* Red border */
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 50%; /* Make the button circular */
+            width: 30px; /* Set width */
+            height: 30px; /* Set height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Terminal title */
+        .terminal-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Command input form */
+        .command-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .command-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .command-submit {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Command history */
+        .command-history {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .command-history-item {
+            margin-bottom: 10px;
+        }
+
+        /* Current directory */
+        .current-directory {
+            font-style: italic;
+            color: #8aff80;
+        }
+
+        /* NLP commands guide */
+        .nlp-guide {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7); /* Translucent black background */
+            border-radius: 8px;
+            padding: 10px;
+            max-height: 60vh; /* Limit height and add scrollbar if content exceeds */
+            overflow-y: auto;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="terminal-container">
+    <button class="close-button" onclick="location.href='/';">&times;</button> <!-- Close button -->
+    <strong><div class="terminal-title">Terminal Clone</div>
+    </strong><form class="command-form" method="post">
+        {% csrf_token %}
+        <input type="text" id="command" name="command" class="command-input" autofocus>
+        <button type="submit" class="command-submit">Run Command</button>
+    </form>
+    <h3>Command History</h3><h3>{{ output }}</h3>
+
+    <ul class="command-history">
+        {% for command_entry in command_history %}
+            <li class="command-history-item"><strong>{{ command_entry.command }}</strong> - {{ command_entry.output }}</li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>
